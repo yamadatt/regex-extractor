@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Cache Go modules
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Download dependencies
+      run: go mod download
+
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Build for multiple platforms
+      run: |
+        GOOS=linux GOARCH=amd64 go build -o regex-extractor-linux-amd64 .
+        GOOS=linux GOARCH=arm64 go build -o regex-extractor-linux-arm64 .
+        GOOS=windows GOARCH=amd64 go build -o regex-extractor-windows-amd64.exe .
+        GOOS=darwin GOARCH=amd64 go build -o regex-extractor-darwin-amd64 .
+        GOOS=darwin GOARCH=arm64 go build -o regex-extractor-darwin-arm64 .
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Linux AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./regex-extractor-linux-amd64
+        asset_name: regex-extractor-linux-amd64
+        asset_content_type: application/octet-stream
+
+    - name: Upload Linux ARM64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./regex-extractor-linux-arm64
+        asset_name: regex-extractor-linux-arm64
+        asset_content_type: application/octet-stream
+
+    - name: Upload Windows AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./regex-extractor-windows-amd64.exe
+        asset_name: regex-extractor-windows-amd64.exe
+        asset_content_type: application/octet-stream
+
+    - name: Upload macOS AMD64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./regex-extractor-darwin-amd64
+        asset_name: regex-extractor-darwin-amd64
+        asset_content_type: application/octet-stream
+
+    - name: Upload macOS ARM64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./regex-extractor-darwin-arm64
+        asset_name: regex-extractor-darwin-arm64
+        asset_content_type: application/octet-stream

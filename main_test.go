@@ -65,7 +65,11 @@ func TestLoadConfig(t *testing.T) {
 			// Create temporary config file
 			tmpfile, err := os.CreateTemp("", "config*.yaml")
 			require.NoError(t, err)
-			defer os.Remove(tmpfile.Name())
+			defer func() {
+				if err := os.Remove(tmpfile.Name()); err != nil {
+					t.Logf("Failed to remove temp file: %v", err)
+				}
+			}()
 
 			_, err = tmpfile.Write([]byte(tt.configData))
 			require.NoError(t, err)
@@ -553,7 +557,11 @@ func BenchmarkLoadConfig(b *testing.B) {
 		b.Run(cs.name, func(b *testing.B) {
 			tmpfile, err := os.CreateTemp("", "benchmark_config*.yaml")
 			require.NoError(b, err)
-			defer os.Remove(tmpfile.Name())
+			defer func() {
+				if err := os.Remove(tmpfile.Name()); err != nil {
+					b.Logf("一時ファイルの削除に失敗: %v", err)
+				}
+			}()
 
 			_, err = tmpfile.Write([]byte(cs.configData))
 			require.NoError(b, err)

@@ -5,7 +5,8 @@
       "Bash(mv:*)",
       "Bash(zip:*)",
       "Bash(go get:*)",
-      "Bash(go test:*)"
+      "Bash(go test:*)",
+      "Bash(golangci-lint run:*)"
     ],
     "deny": [],
     "ask": []
