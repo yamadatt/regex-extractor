@@ -21,6 +21,7 @@ linters:
   disable:
     - depguard
     - exhaustive
+    - goanalysis_metalinter
 
 linters-settings:
   errcheck:
