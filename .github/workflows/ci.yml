@@ -66,4 +66,4 @@ jobs:
       uses: golangci/golangci-lint-action@v3
       with:
         version: latest
-        args: --out-format=colored-line-number --skip-dirs=vendor --disable=goanalysis_metalinter
+        args: --out-format=colored-line-number
