@@ -1,0 +1,50 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test files
+tests/
+*.test
+
+# Go specific
+go.sum
+vendor/
+
+# WordPress themes (zipped)
+*.zip
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.swp
+*.swo
+*~
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Build output
+build/
+dist/
+out/
+
+# Config files with sensitive data
+config.yaml
+*.config
+
+# HTML output files
+*.html
+extraction_results.html
+result.html
+
+# Text output files
+*_replaced.txt
+
+# Hidden files starting with ._
+._*

@@ -1,0 +1,15 @@
+patterns:
+  - name: "title brackets"
+    pattern: 'TITLE: ([^『\n]*)『([^』\n]*)』'
+    description: "Remove brackets from title"
+    replacement: 'TITLE: $1$2'
+
+  - name: "remove category"
+    pattern: 'CATEGORY: Test\n'
+    description: "Remove test category line"
+    replacement: ""
+
+  - name: "simple replace"
+    pattern: 'oldtext'
+    description: "Simple text replacement"
+    replacement: 'newtext'

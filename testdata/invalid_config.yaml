@@ -1,0 +1,3 @@
+invalid: yaml: : data
+  - this is not
+  valid yaml::

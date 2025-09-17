@@ -1,0 +1,10 @@
+TITLE: これは『テスト』タイトルです
+CATEGORY: Test
+AUTHOR: Test Author
+
+これは本文です。
+oldtextが含まれています。
+別の行にもoldtextがあります。
+
+CATEGORY: Keep
+この行は残ります。
